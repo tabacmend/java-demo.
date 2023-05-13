@@ -1,3 +1,7 @@
 {
-  "settingsInheritedFrom": "tabacmend/whitesource-config@main"
+  "settingsInheritedFrom": "tabacmend/whitesource-config@main",
+  "scanSettings":{
+    "baseBranches": ["master", "log4j"],
+    "enableIaC": true
+  }
 }
