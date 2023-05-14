@@ -1,0 +1,26 @@
+name: Mend SAST CLI Scan + Sarif
+
+on: workflow_dispatch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Mend CLI Scan
+      env:
+        #SAST
+        MEND_SAST_SERVER_URL: https://saas-eu.mend.io/sast
+        MEND_SAST_API_TOKEN: ${{secrets.MEND_SAST_API}}
+        MEND_SAST_ORGANIZATION: ${{secrets.MEND_SAST_ORGANIZATION}}
+      run: |
+        echo Downloading Mend CLI
+        curl -LJO https://downloads.mend.io/production/unified/latest/linux_amd64/mend && chmod +x mend
+        echo Start Mend CLI scan
+        ./mend sast --dir ./ --name=${{github.event.repository.name}}-${{github.ref_name}}-${{github.sha}} --app=${{github.event.repository.name}} --baseline=true --report=true --formats sarif --filename Mend_SAST
+    - name: Github Security Results Upload
+      uses: github/codeql-action/upload-sarif@v2
+      with:
+        sarif_file: "Mend_SAST.sarif"
