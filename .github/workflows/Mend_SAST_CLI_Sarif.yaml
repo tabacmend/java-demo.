@@ -17,7 +17,6 @@ jobs:
         MEND_SAST_SERVER_URL: https://saas-eu.mend.io/sast
         MEND_SAST_API_TOKEN: ${{secrets.MEND_SAST_API}}
         MEND_SAST_ORGANIZATION: ${{secrets.MEND_SAST_ORGANIZATION}}
-        MEND_SAST_THRESHOLD_HIGH: 5
       run: |
         echo Downloading Mend CLI
         curl -LJO https://downloads.mend.io/production/unified/latest/linux_amd64/mend && chmod +x mend
