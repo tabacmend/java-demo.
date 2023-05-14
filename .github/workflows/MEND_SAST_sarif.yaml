@@ -11,6 +11,7 @@ jobs:
 
     - name: Mend CLI Scan
       env:
+        GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
         #SAST
         MEND_SAST_SERVER_URL: https://saas-eu.mend.io/sast
         MEND_SAST_API_TOKEN: ${{secrets.MEND_SAST_API}}
