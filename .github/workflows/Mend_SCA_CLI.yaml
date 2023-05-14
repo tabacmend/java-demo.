@@ -23,6 +23,7 @@ jobs:
         #SCA
         MEND_EMAIL: ${{secrets.MEND_SCA_EMAIL}}
         MEND_USER_KEY: ${{secrets.MEND_SCA_USERKEY}}
+        MEND_ORG_UUID: ${{secrets.MEND_ORG_UUID}}
         MEND_URL: https://saas-eu.mend.io
       run: |
         echo Downloading Mend CLI
