@@ -3,5 +3,12 @@
   "scanSettings":{
     "baseBranches": ["master", "log4j"],
     "enableIaC": true
+  },
+  "remediateSettings": {
+    "enableRenovate": true,
+    "extends": [
+      "config:base",
+      "github>whitesource/merge-confidence:beta"
+    ]
   }
 }
