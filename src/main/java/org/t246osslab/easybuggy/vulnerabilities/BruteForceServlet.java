@@ -18,6 +18,7 @@ public class BruteForceServlet extends DefaultLoginServlet {
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
         req.setAttribute("login.page.note", "msg.note.brute.force");
+        String password="some password!";
         super.doGet(req, res);
     }
 
