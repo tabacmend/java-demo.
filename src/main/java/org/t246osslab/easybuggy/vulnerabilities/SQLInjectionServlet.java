@@ -26,6 +26,7 @@ public class SQLInjectionServlet extends AbstractServlet {
         try {
             String name = StringUtils.trim(req.getParameter("name"));
             String password = StringUtils.trim(req.getParameter("password"));
+            String password2 = StringUtils.trim(req.getParameter("password_new"));
             Locale locale = req.getLocale();
             StringBuilder bodyHtml = new StringBuilder();
 
@@ -37,12 +38,14 @@ public class SQLInjectionServlet extends AbstractServlet {
             bodyHtml.append("&nbsp;&nbsp;");
             bodyHtml.append(getMsg("label.password", locale) + ": ");
             bodyHtml.append("<input type=\"password\" name=\"password\" size=\"20\" maxlength=\"20\" autocomplete=\"off\">");
+            bodyHtml.append(getMsg("label.password2", locale) + ": ");
+            bodyHtml.append("<input type=\"password2\" name=\"password2\" size=\"20\" maxlength=\"20\" autocomplete=\"off\">");
             bodyHtml.append("<br><br>");
             bodyHtml.append("<input type=\"submit\" value=\"" + getMsg("label.submit", locale) + "\">");
             bodyHtml.append("<br><br>");
 
             if (!StringUtils.isBlank(name) && !StringUtils.isBlank(password) && password.length() >= 8) {
-                bodyHtml.append(selectUsers(name, password, req));
+                bodyHtml.append(selectUsers_new(name, password, req));
             } else {
                 bodyHtml.append(getMsg("msg.warn.enter.name.and.passwd", locale));
                 bodyHtml.append("<br><br>");
@@ -55,6 +58,36 @@ public class SQLInjectionServlet extends AbstractServlet {
         } catch (Exception e) {
             log.error("Exception occurs: ", e);
         }
+    }
+    
+    private String selectUsers_new(String name, String password2, HttpServletRequest req) {
+        
+        Connection conn = null;
+        Statement stmt = null;
+        ResultSet rs = null;
+        String result = getErrMsg("msg.error.user.not.exist", req.getLocale());
+        try {
+            conn = DBClient.getConnection();
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery("SELECT name, FROM users WHERE ispublic = 'true' AND name='" + name
+                    + "' AND password='" + password2 + "'");
+            StringBuilder sb = new StringBuilder();
+            while (rs.next()) {
+                sb.append("<tr><td>" + rs.getString("name") + "</td><td>" + rs.getString("secret") + "</td></tr>");
+            }
+            if (sb.length() > 0) {
+                result = "<table class=\"table table-striped table-bordered table-hover\" style=\"font-size:small;\"><th>"
+                        + getMsg("label.name", req.getLocale()) + "</th><th>"
+                        + getMsg("label.secret", req.getLocale()) + "</th>" + sb.toString() + "</table>";
+            }
+        } catch (Exception e) {
+            log.error("Exception occurs: ", e);
+        } finally {
+            Closer.close(rs);
+            Closer.close(stmt);
+            Closer.close(conn);
+        }
+        return result;
     }
 
     private String selectUsers(String name, String password, HttpServletRequest req) {
