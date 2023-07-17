@@ -13,7 +13,7 @@
 		"extends": [
 			"config:base",
 			"github>whitesource/merge-confidence:beta",
-			"github>mend-toolkit/mend-examples//Repo-Integration/Renovate/smart-merge-lvp"
+			"github>mend-toolkit/mend-examples//Repo-Integration/Renovate/smart-merge"
 		]
 	},
 	"leastVulnerablePackageSettings": {
